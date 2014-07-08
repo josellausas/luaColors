@@ -4,46 +4,47 @@
 	Usage: print(luaColors.red .. "Hello Red World" .. luaColors.off) will print in red to terminal console.
 ]]
 
-local luaColors = {}
+
+local ll = {}
 --[[Whenever Lua sees a \ followed by a decimal number, 
 it converts this decimal number into its ASCII equivalent.]]
-luaColors.esc = '\27'
+ll.esc = '\27'
 
 -- Defines the font colors
-luaColors.black 	 	= luaColors.esc .. '[30m' 
-luaColors.red 	 	 	= luaColors.esc .. '[31m'
-luaColors.green 	 	= luaColors.esc .. '[32m'
-luaColors.yellow 	 	= luaColors.esc .. '[33m'
-luaColors.blue 	 		= luaColors.esc .. '[34m'
-luaColors.magenta 	 	= luaColors.esc .. '[35m'
-luaColors.cyan 	 		= luaColors.esc .. '[36m'
-luaColors.white 	 	= luaColors.esc .. '[37m'
+ll.black 	 	= ll.esc .. '[30m' 
+ll.red 	 	 	= ll.esc .. '[31m'
+ll.green 	 	= ll.esc .. '[32m'
+ll.yellow 	 	= ll.esc .. '[33m'
+ll.blue 	 	= ll.esc .. '[34m'
+ll.magenta 	 	= ll.esc .. '[35m'
+ll.cyan 	 	= ll.esc .. '[36m'
+ll.white 	 	= ll.esc .. '[37m'
 
 
 -- Defines the backgorund colors
-luaColors.bg = {}
+ll.bg = {}
 
-luaColors.bg.black    = luaColors.esc .. '[40m'
-luaColors.bg.red 	  = luaColors.esc .. '[41m'
-luaColors.bg.green    = luaColors.esc .. '[42m'
-luaColors.bg.yellow   = luaColors.esc .. '[43m'
-luaColors.bg.blue 	  = luaColors.esc .. '[44m'
-luaColors.bg.magenta  = luaColors.esc .. '[45m'
-luaColors.bg.cyan 	  = luaColors.esc .. '[46m'
-luaColors.bg.white    = luaColors.esc .. '[47m'
+ll.bg.black   = ll.esc .. '[40m'
+ll.bg.red 	  = ll.esc .. '[41m'
+ll.bg.green   = ll.esc .. '[42m'
+ll.bg.yellow  = ll.esc .. '[43m'
+ll.bg.blue 	  = ll.esc .. '[44m'
+ll.bg.magenta = ll.esc .. '[45m'
+ll.bg.cyan 	  = ll.esc .. '[46m'
+ll.bg.white   = ll.esc .. '[47m'
 
 -- Other attributes
-luaColors.bold		  	= luaColors.esc .. '[1m'
-luaColors.underline		= luaColors.esc .. '[4m'
-luaColors.blink			= luaColors.esc .. '[5m'
-luaColors.inverse		= luaColors.esc .. '[7m'
-luaColors.strikeout    	= luaColors.esc .. '[8m'
-luaColors.off		    = luaColors.esc .. '[0m'
+ll.bold		  	= ll.esc .. '[1m'
+ll.underline	= ll.esc .. '[4m'
+ll.blink		= ll.esc .. '[5m'
+ll.inverse		= ll.esc .. '[7m'
+ll.strikeout    = ll.esc .. '[8m'
+ll.off		    = ll.esc .. '[0m'
 
-luaColors.endl			= luaColors.esc .. '[0m\n'
+ll.endl			= ll.esc .. '[0m\n'
 
-luaColors.important = luaColors.esc .. '[1;44;37m'
-luaColors.error    = luaColors.esc .. '[1;5;41;37m'
+ll.important = ll.esc .. '[1;44;37m'
+ll.error    = ll.esc .. '[1;5;41;37m'
 
 
 
@@ -86,19 +87,29 @@ print = function(message)
     	funcName = "()"
     end
 
+    -- The print fails if a message is nil or a table. 
+    -- This is now fixed!
+    -- Handle nil variables
+    local betterMessage = message or 'nil';
+
+    -- Handle table concatenatiosn
+    if type(betterMessage) == "table" then
+    	betterMessage = tostring( betterMessage )
+    end
+
     -- Build a colorful and formatted print log. 
 	local theString =  "\n" .. 
-	luaColors.red .. 
-	luaColors.bold .. "+] Source: " .. luaColors.off .. 
-	luaColors.underline .. source_file .. luaColors.off .. "\n" .. 
-	luaColors.red .. 
-	luaColors.bold .. "+] Function: " .. luaColors.off .. 
-	luaColors.green .. 
-	luaColors.bold .. 
+	ll.red .. 
+	ll.bold .. "+] Source: " .. ll.off .. 
+	ll.underline .. source_file .. ll.off .. "\n" .. 
+	ll.red .. 
+	ll.bold .. "+] Function: " .. ll.off .. 
+	ll.green .. 
+	ll.bold .. 
 	funcName .. " - " ..
-	luaColors.off .. luaColors.off .. 
-	luaColors.bold .. luaColors.magenta .. "[line " .. line .. "]" .. luaColors.off .. 
-	luaColors.cyan ..  "\n=]>> "  .. luaColors.off .. luaColors.bold .. message .. luaColors.off .. luaColors.off;
+	ll.off .. ll.off .. 
+	ll.bold .. ll.magenta .. "[line " .. line .. "]" .. ll.off .. 
+	ll.cyan ..  "\n=]>> "  .. ll.off .. ll.bold .. betterMessage .. ll.off .. "\n\n";
 
 	-- Prints with the original print function    
     original_print(theString)
@@ -106,14 +117,15 @@ print = function(message)
 end
 
 -- This is the welcome message
-local welcomeMessage =  "\n\n\t\t" .. luaColors.bold .. luaColors.inverse .. luaColors.bg.cyan .. luaColors.red .. 
-" Hello! The luaConsoleColors was created by:" .. luaColors.off .. "\n" ..
-luaColors.cyan .. luaColors.blink .. "\t\t---------------------------------\n".. luaColors.off .. "\t\t   " .. 
-luaColors.bold .. luaColors.underline .. luaColors.green .. "jose@josellausas.com" .. luaColors.off .. "\n" ..
-luaColors.cyan .. luaColors.blink .. "\t\t---------------------------------\n".. luaColors.off;
+local welcomeMessage =  "\n\n\t\t" .. ll.bold .. ll.inverse .. ll.bg.cyan .. ll.red .. 
+" Hello! The luaConsoleColors was created by:" .. ll.off .. "\n" ..
+ll.cyan .. ll.blink .. "\t\t---------------------------------\n".. ll.off .. "\t\t   " .. 
+ll.bold .. ll.underline .. ll.green .. "jose@josellausas.com" .. ll.off .. "\n" ..
+ll.cyan .. ll.blink .. "\t\t---------------------------------\n".. ll.off .. 
+"\n\n"
 -- Print our welcome message with pretty colors
 original_print(welcomeMessage)
 
 
 
-return luaColors;
+return ll;
