@@ -6,6 +6,7 @@ Outputs nice colors to the terminal when using lua's print() function. This modu
 Use inside the print() function to turn off/on text formatting and colors. 
 
 ##Available colors and formats:
+
 ###Text and background colors:
 - Black
 - Red
